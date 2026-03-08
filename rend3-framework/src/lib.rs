@@ -475,13 +475,12 @@ impl<T: 'static> ApplicationHandler<T> for Rend3ApplicationHandler<'_,T> {
         
     }
     /// Program resumed after suspend
-    //  ***UNTESTED***
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        event_loop.set_control_flow(ControlFlow::Poll); // not sure about this. 
-        self.suspended = false;     // ***NEEDS TESTING***
-        self.suspended = true;
+        event_loop.set_control_flow(ControlFlow::Poll);
+        self.suspended = false;
+        self.window.request_redraw();
         let event = Event::Resumed {};
-        self.pass_through_event(event_loop, event);    // pass up to Rend3 level
+        self.pass_through_event(event_loop, event);
     }
     
     /// Window event received
