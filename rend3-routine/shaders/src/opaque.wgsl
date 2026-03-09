@@ -525,7 +525,14 @@ fn fs_main(vs_out: VertexOutput) -> @location(0) vec4<f32> {
         color += max(surface_shading(l, intensity, pixel, v, pixel.ambient_occlusion), vec3<f32>(0.0));
     }
 
-    let ambient = uniforms.ambient * pixel.albedo;
-    let shaded = vec4<f32>(color, pixel.albedo.a);
-    return max(ambient, shaded);
+    // Additive ambient for uniform base illumination
+    let ambient = (uniforms.ambient.rgb * pixel.albedo.rgb);
+
+    // Headlight: diffuse light from camera direction so viewed surfaces are lit.
+    // Intensity controlled by ambient.a.
+    let headlight_intensity = uniforms.ambient.a;
+    let nov = abs(dot(pixel.normal, v));
+    let headlight = pixel.diffuse_color * nov * headlight_intensity;
+
+    return vec4<f32>(color + ambient + headlight, pixel.albedo.a);
 }
