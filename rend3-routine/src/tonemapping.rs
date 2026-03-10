@@ -41,7 +41,7 @@ fn create_pipeline(
         )),
     });
 
-    let fs_entry_point = if output_format.is_srgb() { "fs_main_scene" } else { "fs_main_monitor" };
+    let fs_entry_point = if output_format.is_srgb() { "fs_main_monitor" } else { "fs_main_scene" };
 
     let pll = device.create_pipeline_layout(&PipelineLayoutDescriptor {
         label: Some("tonemapping pass"),
